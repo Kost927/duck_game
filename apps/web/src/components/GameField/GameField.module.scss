@@ -1,0 +1,16 @@
+.field {
+  position: relative;
+  width: 900px;
+  max-width: 100%;
+  height: 500px;
+  max-height: 70vh;
+  background-image: url("/images/background.png");
+  background-size: cover;
+  background-position: center;
+  cursor:
+    url("/images/crosshair.png") 24 24,
+    crosshair;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}

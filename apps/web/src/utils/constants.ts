@@ -1,0 +1,12 @@
+export const FIELD_WIDTH = 900;
+export const FIELD_HEIGHT = 500;
+export const DUCK_WIDTH = 60;
+export const DUCK_HEIGHT = 60;
+export const FLIGHT_DURATION_MS = 5000;
+export const HIT_DISAPPEAR_MS = 3000;
+export const FRAME_SWAP_MS = 160;
+export const QUACK_VOLUME = 0.5;
+export const AWP_VOLUME = 0.6;
+export const SCHEDULE_DELAY_MIN_MS = 10000;
+export const SCHEDULE_DELAY_MAX_MS = 30000;
+export const SCHEDULE_FIXED_MS = 10000;

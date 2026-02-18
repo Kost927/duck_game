@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "noEmit": true,
+    "outDir": "./dist",
+    "rootDir": ".",
+    "baseUrl": ".",
+    "paths": { "@duck-hunt/shared": ["../../packages/shared/src"], "store": ["src/store"], "store/*": ["src/store/*"], "utils": ["src/utils"], "utils/*": ["src/utils/*"], "components": ["src/components"], "components/*": ["src/components/*"] }
+  },
+  "include": ["src", "vite-env.d.ts"],
+  "references": [{ "path": "../../packages/shared" }]
+}
