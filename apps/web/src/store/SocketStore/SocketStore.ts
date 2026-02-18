@@ -2,7 +2,7 @@ import { makeAutoObservable } from "mobx";
 import { io, type Socket } from "socket.io-client";
 import { SOCKET_EVENTS } from "@duck-hunt/shared";
 import type { RoundEndPayload, RoundHitPayload, RoundStartPayload } from "@duck-hunt/shared";
-import { GameStore } from "store";
+import { GameStore } from "../GameStore";
 
 const DEFAULT_URL = "http://localhost:3000";
 

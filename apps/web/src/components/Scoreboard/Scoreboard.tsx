@@ -1,13 +1,10 @@
 import { observer } from "mobx-react-lite";
+import { gameStore } from "store";
 
-type ScoreboardProps = {
-  hits: number;
-  roundsStarted: number;
-};
-
-export const Scoreboard = observer(function Scoreboard({ hits, roundsStarted }: ScoreboardProps) {
+export const Scoreboard = observer(function Scoreboard() {
+  const { hits, roundsStarted } = gameStore;
   return (
-    <div className="scoreboard" aria-live="polite" aria-label="Score">
+    <div aria-live="polite" aria-label="Score">
       Hits: {hits} / Rounds: {roundsStarted}
     </div>
   );

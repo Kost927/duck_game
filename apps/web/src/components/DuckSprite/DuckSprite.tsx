@@ -1,12 +1,11 @@
 import { observer } from "mobx-react-lite";
 import type { DuckWithTrajectory } from "store";
-import { SoundService } from "store";
+import { gameStore, socketStore, SoundService } from "store";
 import { getPosition } from "./DuckSprite.utils";
 import styles from "./DuckSprite.module.scss";
 
-export type DuckSpriteProps = {
+type DuckSpriteProps = {
   duck: DuckWithTrajectory;
-  onHit: () => void;
   frameIndex?: 0 | 1;
   className?: string;
   style?: React.CSSProperties;
@@ -14,7 +13,6 @@ export type DuckSpriteProps = {
 
 export const DuckSprite = observer(function DuckSprite({
   duck,
-  onHit,
   frameIndex = 0,
   className,
   style,
@@ -27,16 +25,24 @@ export const DuckSprite = observer(function DuckSprite({
       ? "/images/duck1.png"
       : "/images/duck2.png";
 
+  const handleHit = (): void => {
+    if (gameStore.config.useServer && socketStore.connected) {
+      socketStore.emitHit();
+    } else {
+      gameStore.hitDuck();
+    }
+  };
+
   const handleClick = (e: React.MouseEvent): void => {
     e.stopPropagation();
     SoundService.playAwp();
-    onHit();
+    handleHit();
   };
 
   const handleKeyDown = (e: React.KeyboardEvent): void => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
-      onHit();
+      handleHit();
     }
   };
 

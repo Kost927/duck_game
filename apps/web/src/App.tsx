@@ -1,12 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { GameField } from "components";
 import { observer } from "mobx-react-lite";
-import { GameField, DebugPanel } from "components";
-import { SocketStore, GameStore, SoundService } from "store";
+import { useEffect, useRef, useState } from "react";
+import { gameStore, socketStore, SoundService } from "store";
 
 import styles from "./App.module.scss";
-
-const gameStore = new GameStore();
-const socketStore = new SocketStore(gameStore);
 
 const AppInner = observer(function AppInner() {
   const [audioUnlocked, setAudioUnlocked] = useState(false);
@@ -56,14 +53,6 @@ const AppInner = observer(function AppInner() {
     };
   }, [audioUnlocked]);
 
-  const handleHit = (): void => {
-    if (gameStore.config.useServer && socketStore.connected) {
-      socketStore.emitHit();
-    } else {
-      gameStore.hitDuck();
-    }
-  };
-
   const handleUnlock = (): void => {
     setAudioUnlocked(true);
   };
@@ -88,22 +77,8 @@ const AppInner = observer(function AppInner() {
         </div>
       ) : null}
       <main className={styles.main}>
-        <GameField
-          hits={gameStore.hits}
-          roundsStarted={gameStore.roundsStarted}
-          currentDuck={gameStore.currentDuck}
-          onHit={handleHit}
-        />
+        <GameField />
       </main>
-      {gameStore.config.debug ? (
-        <div className={styles.debugPanel}>
-          <DebugPanel
-            status={gameStore.status}
-            nextRoundDelayMs={gameStore.nextRoundDelayMs}
-            currentRoundId={gameStore.currentRoundId}
-          />
-        </div>
-      ) : null}
     </div>
   );
 });
@@ -111,5 +86,3 @@ const AppInner = observer(function AppInner() {
 export default function App() {
   return <AppInner />;
 }
-
-export { gameStore };

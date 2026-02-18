@@ -18,7 +18,7 @@ const createVariant = (
   pathStyle,
 });
 
-export const FLIGHT_VARIANTS: FlightVariant[] = [
+const FLIGHT_VARIANTS: FlightVariant[] = [
   createVariant("1", "left", "right", 180, 260, "horizontal"),
   createVariant("2", "right", "left", 320, 400, "horizontal"),
   createVariant("3", "left", "right", 60, 140, "horizontal"),

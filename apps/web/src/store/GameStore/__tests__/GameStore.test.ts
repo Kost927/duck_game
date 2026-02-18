@@ -17,7 +17,7 @@ describe("GameStore", () => {
 
   it("increments roundsStarted when round starts", () => {
     const store = new GameStore();
-    store.setConfig({ useServer: false, schedulingMode: "fixed10", debug: false });
+    store.setConfig({ useServer: false, schedulingMode: "fixed10" });
     store.startLocalScheduler();
     expect(store.roundsStarted).toBe(0);
     vi.advanceTimersByTime(10000);
@@ -29,7 +29,7 @@ describe("GameStore", () => {
 
   it("increments hits only once per round when hitDuck is called", () => {
     const store = new GameStore();
-    store.setConfig({ useServer: false, schedulingMode: "fixed10", debug: false });
+    store.setConfig({ useServer: false, schedulingMode: "fixed10" });
     store.startLocalScheduler();
     vi.advanceTimersByTime(10000);
     expect(store.status).toBe("flying");
@@ -42,7 +42,7 @@ describe("GameStore", () => {
 
   it("transitions flying -> hit -> end", () => {
     const store = new GameStore();
-    store.setConfig({ useServer: false, schedulingMode: "fixed10", debug: false });
+    store.setConfig({ useServer: false, schedulingMode: "fixed10" });
     store.startLocalScheduler();
     vi.advanceTimersByTime(10000);
     expect(store.status).toBe("flying");
@@ -57,7 +57,7 @@ describe("GameStore", () => {
 
   it("schedule delay is within bounds when random scheduling is enabled", () => {
     const store = new GameStore();
-    store.setConfig({ useServer: false, schedulingMode: "random20±10", debug: false });
+    store.setConfig({ useServer: false, schedulingMode: "random20±10" });
     store.startLocalScheduler();
     expect(store.nextRoundDelayMs).toBeGreaterThanOrEqual(10000);
     expect(store.nextRoundDelayMs).toBeLessThanOrEqual(30000);

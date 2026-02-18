@@ -14,7 +14,7 @@ import {
 } from "utils";
 import { createDuckId, createRoundId, getTrajectory } from "./GameStore.utils";
 import type { GameConfig, GameStatus, DuckWithTrajectory } from "./GameStore.types";
-import { SoundService } from "store";
+import { SoundService } from "../SocketStore";
 
 export class GameStore {
   roundsStarted = 0;
@@ -26,7 +26,6 @@ export class GameStore {
   config: GameConfig = {
     schedulingMode: "random20±10",
     useServer: true,
-    debug: true,
   };
 
   private scheduleTimeoutId: ReturnType<typeof setTimeout> | null = null;
