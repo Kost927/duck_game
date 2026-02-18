@@ -1,8 +1,9 @@
 import { observer } from "mobx-react-lite";
 import type { DuckWithTrajectory } from "store";
-import { gameStore, socketStore, SoundService } from "store";
+import { gameStore, socketStore } from "store";
 import { getPosition } from "./DuckSprite.utils";
 import styles from "./DuckSprite.module.scss";
+import { SoundService } from "services";
 
 type DuckSpriteProps = {
   duck: DuckWithTrajectory;

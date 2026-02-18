@@ -14,7 +14,7 @@ import {
 } from "utils";
 import { createDuckId, createRoundId, getTrajectory } from "./GameStore.utils";
 import type { GameConfig, GameStatus, DuckWithTrajectory } from "./GameStore.types";
-import { SoundService } from "../SocketStore";
+import { SoundService } from "services";
 
 export class GameStore {
   roundsStarted = 0;

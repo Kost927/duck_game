@@ -2,9 +2,10 @@ import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import { DuckSprite, Scoreboard } from "components";
 import { FRAME_SWAP_MS } from "utils";
-import { gameStore, SoundService } from "store";
+import { gameStore } from "store";
 import styles from "./GameField.module.scss";
 import { TICK_MS } from "./GameField.constants";
+import { SoundService } from "services";
 
 export const GameField = observer(function GameField() {
   const { currentDuck } = gameStore;

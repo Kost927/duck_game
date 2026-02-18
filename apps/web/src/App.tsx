@@ -1,9 +1,10 @@
 import { GameField } from "components";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
-import { gameStore, socketStore, SoundService } from "store";
+import { gameStore, socketStore } from "store";
 
 import styles from "./App.module.scss";
+import { SoundService } from "services";
 
 const AppInner = observer(function AppInner() {
   const [audioUnlocked, setAudioUnlocked] = useState(false);
@@ -15,6 +16,7 @@ const AppInner = observer(function AppInner() {
 
   useEffect(() => {
     if (!audioUnlocked) return;
+
     if (gameStore.config.useServer) {
       socketStore.connect();
     }

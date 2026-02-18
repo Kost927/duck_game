@@ -9,7 +9,17 @@
     "outDir": "./dist",
     "rootDir": ".",
     "baseUrl": ".",
-    "paths": { "@duck-hunt/shared": ["../../packages/shared/src"], "store": ["src/store"], "store/*": ["src/store/*"], "utils": ["src/utils"], "utils/*": ["src/utils/*"], "components": ["src/components"], "components/*": ["src/components/*"] }
+    "paths": {
+      "@duck-hunt/shared": ["../../packages/shared/src"],
+      "store": ["src/store"],
+      "store/*": ["src/store/*"],
+      "utils": ["src/utils"],
+      "utils/*": ["src/utils/*"],
+      "components": ["src/components"],
+      "components/*": ["src/components/*"],
+      "services": ["src/services"],
+      "services/*": ["src/services/*"]
+    }
   },
   "include": ["src", "vite-env.d.ts"],
   "references": [{ "path": "../../packages/shared" }]

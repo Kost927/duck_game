@@ -3,8 +3,7 @@ import { io, type Socket } from "socket.io-client";
 import { SOCKET_EVENTS } from "@duck-hunt/shared";
 import type { RoundEndPayload, RoundHitPayload, RoundStartPayload } from "@duck-hunt/shared";
 import { GameStore } from "../GameStore";
-
-const DEFAULT_URL = "http://localhost:3000";
+import { DEFAULT_URL } from "./SoundService.constants";
 
 export class SocketStore {
   socket: Socket | null = null;
@@ -54,9 +53,12 @@ export class SocketStore {
   emitHit(): void {
     const socket = this.socket;
     if (!socket || !this.connected) return;
+
     const roundId = this.gameStoreRef.currentRoundId;
     const duckId = this.gameStoreRef.currentDuck?.id;
+
     if (roundId === null || duckId === undefined) return;
+
     socket.emit(SOCKET_EVENTS.DUCK_HIT, {
       roundId,
       duckId,

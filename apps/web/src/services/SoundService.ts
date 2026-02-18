@@ -1,6 +1,6 @@
 import { Howl } from "howler";
 import { AWP_VOLUME, QUACK_VOLUME } from "utils";
-import { AWP_URL, QUACK_URL } from "./SoundService.constants";
+import { AWP_URL, QUACK_URL } from "../store/SocketStore/SoundService.constants";
 
 let quackSound: Howl | null = null;
 let awpSound: Howl | null = null;
