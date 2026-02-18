@@ -45,6 +45,7 @@ export class GameStore {
       clearTimeout(this.scheduleTimeoutId);
       this.scheduleTimeoutId = null;
     }
+
     this.clearRoundTimers();
     SoundService.stopQuack();
   }
@@ -177,7 +178,6 @@ export class GameStore {
     this.hitDuck();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- reason is for API consistency
   endRound(reason: "hit" | "miss"): void {
     if (reason === "hit" && this.hitDisappearTimeoutId !== null) return;
 
