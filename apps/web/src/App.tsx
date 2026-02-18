@@ -24,8 +24,7 @@ const AppInner = observer(function AppInner() {
     return () => {
       socketStore.disconnect();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [audioUnlocked, gameStore.config.useServer]);
+  }, [audioUnlocked]);
 
   useEffect(() => {
     if (!audioUnlocked) return;
@@ -39,7 +38,7 @@ const AppInner = observer(function AppInner() {
     }
     const useLocal = !gameStore.config.useServer || !socketStore.connected;
     const delay = gameStore.config.useServer ? 2000 : 0;
-    const t = setTimeout(() => {
+    const timerId = setTimeout(() => {
       if (gameStore.config.useServer && socketStore.connected) return;
       if (!hasStartedScheduler.current && useLocal) {
         hasStartedScheduler.current = true;
@@ -48,22 +47,19 @@ const AppInner = observer(function AppInner() {
     }, delay);
 
     return () => {
-      clearTimeout(t);
+      clearTimeout(timerId);
 
       if (hasStartedScheduler.current) {
         gameStore.stopLocalScheduler();
         hasStartedScheduler.current = false;
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [audioUnlocked, gameStore.config.useServer, socketStore.connected]);
+  }, [audioUnlocked]);
 
   const handleHit = (): void => {
     if (gameStore.config.useServer && socketStore.connected) {
-      console.log("emitHit");
       socketStore.emitHit();
     } else {
-      console.log("hitDuck");
       gameStore.hitDuck();
     }
   };

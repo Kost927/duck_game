@@ -9,6 +9,9 @@ export default defineConfig({
   resolve: {
     alias: {
       "@duck-hunt/shared": path.resolve(__dirname, "../../packages/shared/src"),
+      store: path.resolve(__dirname, "src/store"),
+      utils: path.resolve(__dirname, "src/utils"),
+      components: path.resolve(__dirname, "src/components"),
     },
   },
 });
