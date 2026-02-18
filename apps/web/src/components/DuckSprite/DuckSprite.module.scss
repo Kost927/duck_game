@@ -4,11 +4,18 @@
   cursor: crosshair;
   z-index: 5;
 
+  &.duckHit {
+    z-index: 15;
+    visibility: visible;
+    opacity: 1;
+  }
+
   img {
     display: block;
     width: 100%;
     height: 100%;
     object-fit: contain;
     user-select: none;
+    pointer-events: none;
   }
 }

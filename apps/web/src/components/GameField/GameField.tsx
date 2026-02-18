@@ -1,8 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
-import { DuckSprite } from "../DuckSprite/DuckSprite";
-import { Scoreboard } from "../Scoreboard/Scoreboard";
-import { FRAME_SWAP_MS } from "../../utils/constants";
+import { DuckSprite, Scoreboard } from "components";
+import { FRAME_SWAP_MS } from "utils";
 import { SoundService, type DuckWithTrajectory } from "store";
 import styles from "./GameField.module.scss";
 import { TICK_MS } from "./GameField.constants";
@@ -35,6 +34,7 @@ export const GameField = observer(function GameField({
     if (!currentDuck) return;
 
     const id = setInterval(() => setTick((t) => t + 1), TICK_MS);
+
     return () => clearInterval(id);
   }, [currentDuck]);
 
@@ -51,7 +51,12 @@ export const GameField = observer(function GameField({
     >
       <Scoreboard hits={hits} roundsStarted={roundsStarted} />
       {currentDuck !== null && (
-        <DuckSprite duck={currentDuck} onHit={onHit} frameIndex={frameIndex} />
+        <DuckSprite
+          key={`${currentDuck.id}-${currentDuck.isHit}`}
+          duck={currentDuck}
+          onHit={onHit}
+          frameIndex={frameIndex}
+        />
       )}
     </div>
   );

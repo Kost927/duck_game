@@ -157,8 +157,12 @@ export class GameStore {
     this.clearRoundTimers();
     SoundService.stopQuack();
     runInAction(() => {
-      this.currentDuck!.isHit = true;
-      this.currentDuck!.hitAt = Date.now();
+      const duck = this.currentDuck!;
+      this.currentDuck = {
+        ...duck,
+        isHit: true,
+        hitAt: Date.now(),
+      };
       this.hits += 1;
       this.status = "hit";
     });
@@ -176,6 +180,8 @@ export class GameStore {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- reason is for API consistency
   endRound(reason: "hit" | "miss"): void {
+    if (reason === "hit" && this.hitDisappearTimeoutId !== null) return;
+
     this.clearRoundTimers();
     SoundService.stopQuack();
     runInAction(() => {

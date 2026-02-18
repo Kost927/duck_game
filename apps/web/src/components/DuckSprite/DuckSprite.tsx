@@ -1,36 +1,63 @@
 import { observer } from "mobx-react-lite";
 import type { DuckWithTrajectory } from "store";
+import { SoundService } from "store";
 import { getPosition } from "./DuckSprite.utils";
 import styles from "./DuckSprite.module.scss";
 
 export type DuckSpriteProps = {
   duck: DuckWithTrajectory;
+  onHit: () => void;
+  frameIndex?: 0 | 1;
   className?: string;
   style?: React.CSSProperties;
 };
 
-const DUCK_IMAGE_SRC = "/images/duck3.png";
-
 export const DuckSprite = observer(function DuckSprite({
   duck,
+  onHit,
+  frameIndex = 0,
   className,
   style,
 }: DuckSpriteProps) {
   const { x, y, flip } = getPosition(duck);
+  const isHit = duck.isHit;
+  const image = isHit
+    ? "/images/duck3.png"
+    : frameIndex === 0
+      ? "/images/duck1.png"
+      : "/images/duck2.png";
+
+  const handleClick = (e: React.MouseEvent): void => {
+    e.stopPropagation();
+    SoundService.playAwp();
+    onHit();
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent): void => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      onHit();
+    }
+  };
 
   return (
     <div
-      className={`${styles.duck} ${className ?? ""}`.trim()}
+      className={`${styles.duck} ${isHit ? styles.duckHit : ""} ${className ?? ""}`.trim()}
       style={{
         ...style,
-        left: `${x}%`,
-        top: `${y}%`,
+        left: x,
+        top: y,
+        width: duck.width,
+        height: duck.height,
         transform: `scaleX(${flip ? -1 : 1})`,
       }}
-      role="img"
-      aria-label="Duck"
+      role={"button"}
+      tabIndex={0}
+      aria-label={isHit ? "Duck hit" : "Duck"}
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
     >
-      <img src={DUCK_IMAGE_SRC} alt="" draggable={false} />
+      <img key={image} src={image} alt="" draggable={false} />
     </div>
   );
 });

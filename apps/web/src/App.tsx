@@ -29,6 +29,7 @@ const AppInner = observer(function AppInner() {
 
   useEffect(() => {
     if (!audioUnlocked) return;
+
     if (gameStore.config.useServer && socketStore.connected) {
       if (hasStartedScheduler.current) {
         gameStore.stopLocalScheduler();
@@ -45,8 +46,10 @@ const AppInner = observer(function AppInner() {
         gameStore.startLocalScheduler();
       }
     }, delay);
+
     return () => {
       clearTimeout(t);
+
       if (hasStartedScheduler.current) {
         gameStore.stopLocalScheduler();
         hasStartedScheduler.current = false;
@@ -57,8 +60,10 @@ const AppInner = observer(function AppInner() {
 
   const handleHit = (): void => {
     if (gameStore.config.useServer && socketStore.connected) {
+      console.log("emitHit");
       socketStore.emitHit();
     } else {
+      console.log("hitDuck");
       gameStore.hitDuck();
     }
   };
