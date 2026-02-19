@@ -2,7 +2,6 @@ import { makeAutoObservable, runInAction } from "mobx";
 import type { RoundStartPayload } from "@duck-hunt/shared";
 import {
   pickRandomVariant,
-  FLIGHT_DURATION_MS,
   HIT_DISAPPEAR_MS,
   SCHEDULE_DELAY_MIN_MS,
   SCHEDULE_DELAY_MAX_MS,
@@ -12,7 +11,12 @@ import {
   FIELD_WIDTH,
   FIELD_HEIGHT,
 } from "utils";
-import { createDuckId, createRoundId, getTrajectory } from "./GameStore.utils";
+import {
+  createDuckId,
+  createRoundId,
+  getTrajectory,
+  getFlightDurationForRound,
+} from "./GameStore.utils";
 import type { GameConfig, GameStatus, DuckWithTrajectory } from "./GameStore.types";
 import { SoundService } from "services";
 
@@ -23,6 +27,7 @@ export class GameStore {
   currentRoundId: string | null = null;
   currentDuck: DuckWithTrajectory | null = null;
   nextRoundDelayMs = 0;
+  stoppedByUser = false;
   config: GameConfig = {
     schedulingMode: "random20±10",
     useServer: true,
@@ -48,6 +53,33 @@ export class GameStore {
 
     this.clearRoundTimers();
     SoundService.stopQuack();
+  }
+
+  stop(): void {
+    this.stopLocalScheduler();
+    runInAction(() => {
+      this.currentDuck = null;
+      this.currentRoundId = null;
+      this.status = "idle";
+      this.nextRoundDelayMs = 0;
+      this.stoppedByUser = true;
+    });
+  }
+
+  restart(): void {
+    this.stopLocalScheduler();
+    runInAction(() => {
+      this.roundsStarted = 0;
+      this.hits = 0;
+      this.currentDuck = null;
+      this.currentRoundId = null;
+      this.status = "idle";
+      this.nextRoundDelayMs = 0;
+      this.stoppedByUser = false;
+    });
+    if (!this.config.useServer) {
+      this.startLocalScheduler();
+    }
   }
 
   private clearRoundTimers(): void {
@@ -90,6 +122,8 @@ export class GameStore {
       const endX = endEdge === "left" ? margin : FIELD_WIDTH - DUCK_WIDTH - margin;
       const startY = Math.max(0, Math.min(FIELD_HEIGHT - DUCK_HEIGHT, y));
       const endY = startY;
+      const flightDurationMs = payload.flightDurationMs;
+
       runInAction(() => {
         this.roundsStarted += 1;
         this.status = "flying";
@@ -107,13 +141,14 @@ export class GameStore {
           startY,
           endX,
           endY,
+          flightDurationMs,
         };
       });
       SoundService.playQuackLoop();
       this.flightTimeoutId = setTimeout(() => {
         this.flightTimeoutId = null;
         this.endRound("miss");
-      }, payload.flightDurationMs);
+      }, flightDurationMs);
       return;
     }
     const variant = pickRandomVariant();
@@ -126,6 +161,8 @@ export class GameStore {
     const roundId = createRoundId();
     const duckId = createDuckId();
     const { startX, startY, endX, endY } = getTrajectory(variant);
+    const nextRoundIndex = this.roundsStarted + 1;
+    const flightDurationMs = getFlightDurationForRound(nextRoundIndex);
     runInAction(() => {
       this.roundsStarted += 1;
       this.status = "flying";
@@ -143,13 +180,14 @@ export class GameStore {
         startY,
         endX,
         endY,
+        flightDurationMs,
       };
     });
     SoundService.playQuackLoop();
     this.flightTimeoutId = setTimeout(() => {
       this.flightTimeoutId = null;
       this.endRound("miss");
-    }, FLIGHT_DURATION_MS);
+    }, flightDurationMs);
   }
 
   hitDuck(): void {

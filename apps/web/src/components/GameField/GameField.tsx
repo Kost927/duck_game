@@ -32,21 +32,51 @@ export const GameField = observer(function GameField() {
     SoundService.playAwp();
   };
 
+  const handleStop = (): void => {
+    gameStore.stop();
+  };
+
+  const handleRestart = (): void => {
+    gameStore.restart();
+  };
+
   return (
-    <div
-      className={styles.field}
-      role="application"
-      aria-label="Duck Hunt game field"
-      onClick={handleFieldClick}
-    >
-      <Scoreboard />
-      {currentDuck !== null && (
-        <DuckSprite
-          key={`${currentDuck.id}-${currentDuck.isHit}`}
-          duck={currentDuck}
-          frameIndex={frameIndex}
-        />
-      )}
+    <div className={styles.wrapper}>
+      <div className={styles.controls}>
+        <Scoreboard />
+        <div className={styles.buttons}>
+          <button
+            type="button"
+            className={styles.button}
+            onClick={handleStop}
+            aria-label="Stop game"
+          >
+            Stop
+          </button>
+          <button
+            type="button"
+            className={styles.button}
+            onClick={handleRestart}
+            aria-label="Restart game"
+          >
+            Restart
+          </button>
+        </div>
+      </div>
+      <div
+        className={styles.field}
+        role="application"
+        aria-label="Duck Hunt game field"
+        onClick={handleFieldClick}
+      >
+        {currentDuck !== null && (
+          <DuckSprite
+            key={`${currentDuck.id}-${currentDuck.isHit}`}
+            duck={currentDuck}
+            frameIndex={frameIndex}
+          />
+        )}
+      </div>
     </div>
   );
 });

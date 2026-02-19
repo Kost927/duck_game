@@ -16,6 +16,7 @@ const AppInner = observer(function AppInner() {
 
   useEffect(() => {
     if (!audioUnlocked) return;
+    if (gameStore.stoppedByUser) return;
 
     if (gameStore.config.useServer) {
       socketStore.connect();
@@ -23,10 +24,12 @@ const AppInner = observer(function AppInner() {
     return () => {
       socketStore.disconnect();
     };
-  }, [audioUnlocked]);
+    // eslint-disable-next-line -- gameStore.stoppedByUser is valid: observer() re-renders on change
+  }, [audioUnlocked, gameStore.stoppedByUser]);
 
   useEffect(() => {
     if (!audioUnlocked) return;
+    if (gameStore.stoppedByUser) return;
 
     if (gameStore.config.useServer && socketStore.connected) {
       if (hasStartedScheduler.current) {
@@ -53,25 +56,41 @@ const AppInner = observer(function AppInner() {
         hasStartedScheduler.current = false;
       }
     };
-  }, [audioUnlocked]);
+    // eslint-disable-next-line -- gameStore.stoppedByUser is valid: observer() re-renders on change
+  }, [audioUnlocked, gameStore.stoppedByUser]);
 
-  const handleUnlock = (): void => {
-    setAudioUnlocked(true);
+  const handleOverlayClick = (): void => {
+    if (!audioUnlocked) {
+      setAudioUnlocked(true);
+      return;
+    }
+    if (gameStore.stoppedByUser) {
+      gameStore.restart();
+      if (gameStore.config.useServer) {
+        socketStore.connect();
+      }
+    }
   };
+
+  const showOverlay = !audioUnlocked || gameStore.stoppedByUser;
 
   return (
     <div className={styles.app}>
-      {!audioUnlocked ? (
+      {showOverlay ? (
         <div
           className={styles.unlockOverlay}
           role="button"
           tabIndex={0}
-          aria-label="Click to start game and enable sound"
-          onClick={handleUnlock}
+          aria-label={
+            gameStore.stoppedByUser
+              ? "Click to resume game"
+              : "Click to start game and enable sound"
+          }
+          onClick={handleOverlayClick}
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") {
               e.preventDefault();
-              handleUnlock();
+              handleOverlayClick();
             }
           }}
         >

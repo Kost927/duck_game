@@ -1,5 +1,13 @@
 import type { FlightVariant } from "@duck-hunt/shared";
-import { FIELD_WIDTH, FIELD_HEIGHT, DUCK_WIDTH, DUCK_HEIGHT } from "utils";
+import {
+  FIELD_WIDTH,
+  FIELD_HEIGHT,
+  DUCK_WIDTH,
+  DUCK_HEIGHT,
+  FLIGHT_DURATION_MS,
+  FLIGHT_DURATION_MIN_MS,
+  FLIGHT_DURATION_DECREASE_PER_ROUND_MS,
+} from "utils";
 
 export const createDuckId = (): string =>
   `duck-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
@@ -23,3 +31,9 @@ export const getTrajectory = (
   }
   return { startX, startY, endX, endY };
 };
+
+export const getFlightDurationForRound = (roundIndex: number): number =>
+  Math.max(
+    FLIGHT_DURATION_MIN_MS,
+    FLIGHT_DURATION_MS - (roundIndex - 1) * FLIGHT_DURATION_DECREASE_PER_ROUND_MS,
+  );

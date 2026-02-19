@@ -1,3 +1,3 @@
 export const FLIGHT_DURATION_MS = 5000;
 export const SCHEDULE_DELAY_MIN_MS = 10000;
-export const SCHEDULE_DELAY_MAX_MS = 30000;
+export const SCHEDULE_DELAY_MAX_MS = 20000;

@@ -14,4 +14,5 @@ export type DuckWithTrajectory = DuckEntity & {
   startY: number;
   endX: number;
   endY: number;
+  flightDurationMs: number;
 };

@@ -1,4 +1,3 @@
-import { FLIGHT_DURATION_MS } from "utils";
 import { type DuckWithTrajectory } from "store";
 
 const getProgress = (duck: DuckWithTrajectory): number => {
@@ -6,7 +5,7 @@ const getProgress = (duck: DuckWithTrajectory): number => {
     duck.isHit && duck.hitAt !== undefined
       ? duck.hitAt - duck.spawnedAt
       : Date.now() - duck.spawnedAt;
-  return Math.min(1, elapsed / FLIGHT_DURATION_MS);
+  return Math.min(1, elapsed / duck.flightDurationMs);
 };
 
 export const getPosition = (duck: DuckWithTrajectory): { x: number; y: number; flip: boolean } => {
